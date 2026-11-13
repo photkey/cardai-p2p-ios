@@ -153,7 +153,9 @@ actor IrohClient {
             throw Wire.Error.invalid("控制帧超限：\(length)")
         }
         let payload = length == 0 ? Data() : try await recv.readExact(size: length)
-        return ControlMessage.parse(try Wire.unpackControl(payload))
+        var frame = head
+        frame.append(payload)
+        return ControlMessage.parse(try Wire.unpackControl(frame))
     }
 
     private static func parseAddressSpec(_ spec: String) throws -> EndpointAddr {
