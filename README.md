@@ -25,7 +25,7 @@ CI：`.github/workflows/ios.yml`（macOS 26，XcodeGen 2.46.0，iroh-ffi 1.2.0�
 ## 配对
 
 Windows 端 `CARDAI_CAPTURE_SOURCE=iroh` 启动后显示二维码；iOS 扫码或手填
-`ticket / room / token / addr`。`addr` 为 `<endpoint_id>@<ip:port>,...`，
+`ticket / room / token / addr`。配对信息保存在 UserDefaults，App 重启后自动重连。`addr` 为 `<endpoint_id>@<ip:port>,...`，
 跨语言绑定的 ticket 编解码不兼容时优先使用。
 
 ## 限制
