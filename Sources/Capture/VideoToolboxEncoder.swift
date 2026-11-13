@@ -95,7 +95,7 @@ final class VideoToolboxEncoder: @unchecked Sendable {
             : nil
         let status = VTCompressionSessionEncodeFrame(session, imageBuffer: pixelBuffer,
             presentationTimeStamp: pts, duration: .invalid,
-            frameProperties: frameProperties, sourceFrameRefCon: nil,
+            frameProperties: frameProperties, sourceFrameRefcon: nil,
             infoFlagsOut: &flags)
         if status != noErr {
             onError("ENCODER_ERROR:EncodeFrame \(status)")
