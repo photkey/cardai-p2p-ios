@@ -9,6 +9,7 @@ struct ContentView: View {
     @State private var token = ""
     @State private var address = ""
     @State private var showScanner = false
+    @State private var autoConnected = false
 
     var body: some View {
         VStack(spacing: 10) {
@@ -38,9 +39,7 @@ struct ContentView: View {
 
             HStack {
                 Button("扫描二维码") { showScanner = true }
-                Button("连接") {
-                    model.connect(ticket: ticket, room: room, token: token, addr: address)
-                }
+                Button("连接") { connect() }
                 .disabled(ticket.isEmpty || token.isEmpty)
                 Spacer()
                 Button(model.capturing ? "停止" : "开始") {
@@ -50,7 +49,10 @@ struct ContentView: View {
             }
         }
         .padding()
-        .onAppear { UIApplication.shared.isIdleTimerDisabled = true }
+        .onAppear {
+            UIApplication.shared.isIdleTimerDisabled = true
+            restoreSavedPairing()
+        }
         .onDisappear { UIApplication.shared.isIdleTimerDisabled = false }
         .sheet(isPresented: $showScanner) {
             QRScannerView { code in
@@ -58,6 +60,22 @@ struct ContentView: View {
                 applyPairingURI(code)
             }
         }
+    }
+
+    private func connect() {
+        PairingStore.save(ticket: ticket, room: room, token: token, addr: address)
+        model.connect(ticket: ticket, room: room, token: token, addr: address)
+    }
+
+    private func restoreSavedPairing() {
+        guard !autoConnected, let saved = PairingStore.load() else { return }
+        autoConnected = true
+        ticket = saved.ticket
+        room = saved.room
+        token = saved.token
+        address = saved.addr
+        model.connect(ticket: saved.ticket, room: saved.room, token: saved.token,
+            addr: saved.addr)
     }
 
     private func applyPairingURI(_ code: String) {
