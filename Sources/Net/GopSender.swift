@@ -12,7 +12,7 @@ actor GopSender {
     private let client: IrohClient
     private let onOverflow: @Sendable (String) -> Void
     private(set) var mode: String = "realtime"
-    private(set) var maxBufferBytes: Int64 = 32 * 1024 * 1024
+    private(set) var maxBufferBytes: Int64 = 128 * 1024 * 1024
     private(set) var droppedGroups: Int64 = 0
     private var reliable: [UInt32: Int64] = [:]
     private var reliableBytes: Int64 = 0
